@@ -67,19 +67,11 @@ final class SortItemTest extends TestCase
 
     protected function createUsers($count = 1)
     {
-        $users = collect([]);
-
-        for ($i = 0; $i < $count; ++$i) {
-            $user = new User([
+        return collect(range(1, $count))->map(function (int $i) {
+            return User::create([
                 'name' => 'Test-'.$i,
             ]);
-
-            $user->save();
-
-            $users->push($user);
-        }
-
-        return $users;
+        });
     }
 
     public function testCreatingModelsWithCorrectOrder()
