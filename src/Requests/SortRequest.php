@@ -42,6 +42,8 @@ class SortRequest extends FormRequest
                         'different:previous',
                     ],
                 ];
+            default:
+                return [];
         }
     }
 }
