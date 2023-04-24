@@ -55,7 +55,7 @@ final class SortItemTest extends TestCase
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('order')->nullable();
+            $table->unsignedInteger('order')->nullable();
             $table->timestamps();
         });
     }
