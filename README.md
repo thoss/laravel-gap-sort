@@ -6,6 +6,10 @@ This package provides a way to sort items in a table using the "Gap" algorithm, 
 
 [Description of the class](SORTITEM_DESCRIPTION.md)
 
+## Requirement
+
+PHP 8.1 and Laravel 9/10
+
 ## Installation
 
 You can install this package using composer.  
