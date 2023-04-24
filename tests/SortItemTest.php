@@ -70,6 +70,7 @@ final class SortItemTest extends TestCase
         return collect(range(1, $count))->map(function (int $i) {
             return Dummy::create([
                 'name' => 'Test-'.$i,
+                self::SORT_COLUM => $i * self::SORT_GAP, // TODO: Das müsste der Sortable Trait übernehmen
             ]);
         });
     }
@@ -88,7 +89,5 @@ class Dummy extends Model
 {
     use Sortable;
 
-    protected $fillable = [
-        'name',
-    ];
+    protected $guarded = [];
 }
