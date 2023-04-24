@@ -2,12 +2,14 @@
 
 namespace Thoss\GapSort\Tests;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 use Thoss\GapSort\SortItem;
+use Thoss\GapSort\Traits\Sortable;
 
 final class SortItemTest extends TestCase
 {
@@ -80,4 +82,13 @@ final class SortItemTest extends TestCase
             $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $user->order);
         });
     }
+}
+
+class Dummy extends Model
+{
+    use Sortable;
+
+    protected $fillable = [
+        'name',
+    ];
 }
