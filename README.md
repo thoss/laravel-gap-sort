@@ -6,13 +6,13 @@ beschreibung
 
 ## Installation
 
-You can install this package using composer. Just run the command below.
+You can install this package using composer.  
+Just run the command below.
 
 ```
 composer require thoss/laravel-gap-sort
 ```
 
-```
 
 Optionally you can publish the config file with:
 
@@ -58,7 +58,7 @@ To add sortable behaviour to your model you must:
 ### Use the sorting with an REST API
 
 1. register `/sort` Route  
-With the enabled resource registrar you can easily add the `/sort` Route
+(with the enabled resource registrar you can easily add the `/sort` Route)
 ```php
 Route::resource('salutations', 'SalutationsController', ['with' => ['sort']]);
 ```
