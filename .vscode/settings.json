@@ -1,0 +1,6 @@
+{
+  "php-cs-fixer.onsave": true,
+  "php-cs-fixer.rules": "@Symfony",
+  "editor.defaultFormatter": "junstyle.php-cs-fixer",
+  "git.ignoreLimitWarning": true
+}

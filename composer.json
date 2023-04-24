@@ -1,0 +1,49 @@
+{
+  "name": "thoss/laravel-gap-sort",
+  "description": "Package to sort items with laravel",
+  "keywords": [
+    "sort",
+    "sortable",
+    "eloquent",
+    "model",
+    "laravel",
+    "behaviour",
+    "gap",
+    "performant"
+  ],
+  "authors": [
+    {
+      "name": "Timm Hossfeld"
+    }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "^8.1",
+    "illuminate/database": "^9.0|^10.0",
+    "illuminate/support": "^9.0|^10.0",
+    "spatie/laravel-package-tools": "^1.9"
+  },
+  "require-dev": {},
+  "autoload": {
+    "psr-4": {
+      "Thoss\\GapSort\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Thoss\\GapSort\\Test\\": "tests"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Thoss\\GapSort\\GapSortServiceProvider"
+      ]
+    }
+  }
+}
