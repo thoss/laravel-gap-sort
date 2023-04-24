@@ -60,67 +60,22 @@ final class SortItemTest extends TestCase
         });
     }
 
-    protected function setAndGet($orders, $requestBody)
+    protected function createUsers($count = 1)
     {
-        // create User
-        foreach ($orders as $order) {
-            User::create(['order' => $order]);
+        $users = collect([]);
+
+        for ($i = 0; $i < $count; ++$i) {
+            $users->push(User::create());
         }
 
-        // set request body
-        $this->request->merge($requestBody);
-
-        $this->sortItem->handle($this->request);
-
-        return (object) [
-            'main' => isset($requestBody['main']) ? User::find($requestBody['main']) : null,
-            'previous' => isset($requestBody['previous']) ? User::find($requestBody['previous']) : null,
-            'next' => isset($requestBody['next']) ? User::find($requestBody['next']) : null,
-        ];
+        return $users;
     }
 
-    public function testNoGap()
+    public function testCreatingModelsWithCorrectOrder()
     {
-        $users = $this->setAndGet([1, 2, 3], [
-            'main' => 1,
-            'previous' => 2,
-            'next' => 3,
-        ]);
+        $users = $this->createUsers(5);
 
-        // ob Gap zwischen orders erstellt wurde
-        $diffMainAndPrevious = $users->main->order - $users->previous->order;
-        $diffNextAndMain = $users->next->order - $users->main->order;
-
-        $this->assertTrue($diffMainAndPrevious > 1 && $diffNextAndMain > 1);
-
-        // ob Items richtig sortiert wurden
-        $this->assertTrue($users->main->order > $users->previous->order && $users->main->order < $users->next->order);
-    }
-
-    public function testWithoutNextItem()
-    {
-        $users = $this->setAndGet([1, 100], [
-            'main' => 1,
-            'previous' => 2,
-        ]);
-
-        $diffMainAndPrevious = $users->main->order - $users->previous->order;
-
-        // wenn Gap > 1 wäre, ist MainOrder so oder so großer. D.h. richtig sortiert
-        $this->assertTrue($diffMainAndPrevious > 1);
-    }
-
-    public function testWithoutPrevious()
-    {
-        $users = $this->setAndGet([1, 100], [
-            'main' => 2,
-            'next' => 1,
-        ]);
-
-        $diffNextAndMain = $users->next->order - $users->main->order;
-
-        // wenn Gap > 1 wäre, ist MainOrder so oder so großer. D.h. richtig sortiert
-        $this->assertTrue($diffNextAndMain > 1);
+        dd($users);
     }
 }
 

@@ -12,7 +12,7 @@ trait Sortable
             $lastItem = $model->orderBy(config('laravel-gap-sort.sorting.column'), 'DESC')->first();
             $newOrder = null !== $lastItem ? $lastItem->order + $gap : $gap;
 
-            $model->order = $newOrder;
+            $model->{config('laravel-gap-sort.sorting.column')} = $newOrder;
         });
     }
 }
