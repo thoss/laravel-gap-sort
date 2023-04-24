@@ -2,14 +2,12 @@
 
 namespace Thoss\GapSort\Tests;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 use Thoss\GapSort\SortItem;
-use Thoss\GapSort\Traits\Sortable;
 
 final class SortItemTest extends TestCase
 {
@@ -32,7 +30,7 @@ final class SortItemTest extends TestCase
         $app['config']->set('laravel-gap-sort.sorting.gap', self::SORT_GAP);
         $app['config']->set('laravel-gap-sort.sorting.column', self::SORT_COLUM);
 
-        $this->sortItem = new SortItem(User::class);
+        $this->sortItem = new SortItem(Dummy::class);
 
         Carbon::setTestNow(Carbon::now());
 
@@ -52,12 +50,12 @@ final class SortItemTest extends TestCase
     protected function tearDown(): void
     {
         Carbon::setTestNow(null);
-        Schema::drop('users');
+        Schema::drop('dummies');
     }
 
     protected function createSchema()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('dummies', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
             $table->unsignedInteger(self::SORT_COLUM)->nullable();
@@ -65,10 +63,10 @@ final class SortItemTest extends TestCase
         });
     }
 
-    protected function createUsers($count = 1)
+    protected function createDummies($count = 1)
     {
         return collect(range(1, $count))->map(function (int $i) {
-            return User::create([
+            return Dummy::create([
                 'name' => 'Test-'.$i,
             ]);
         });
@@ -76,19 +74,10 @@ final class SortItemTest extends TestCase
 
     public function testCreatingModelsWithCorrectOrder()
     {
-        $users = $this->createUsers(10);
+        $dummies = $this->createDummies(10);
 
-        $users->each(function ($user, $index) {
+        $dummies->each(function ($user, $index) {
             $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $user->order);
         });
     }
-}
-
-class User extends Eloquent
-{
-    use Sortable;
-
-    protected $fillable = [
-        'name',
-    ];
 }
