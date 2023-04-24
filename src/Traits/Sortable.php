@@ -9,10 +9,12 @@ trait Sortable
     {
         static::creating(function ($model) {
             $gap = config('laravel-gap-sort.sorting.gap');
-            $lastItem = $model->orderBy(config('laravel-gap-sort.sorting.column'), 'DESC')->first();
-            $newOrder = null !== $lastItem ? $lastItem->order + $gap : $gap;
+            $orderColumn = config('laravel-gap-sort.sorting.column');
 
-            $model->{config('laravel-gap-sort.sorting.column')} = $newOrder;
+            $lastItem = $model->orderBy($orderColumn, 'DESC')->first();
+            $newOrder = null !== $lastItem ? $lastItem->{$orderColumn} + $gap : $gap;
+
+            $model->{$orderColumn} = $newOrder;
         });
     }
 }
