@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
-use Thoss\GapSort\Support\SortItem;
-use Thoss\GapSort\Traits\Model\Sortable;
+use Thoss\GapSort\SortItem;
+use Thoss\GapSort\Traits\Sortable;
 
 final class SortItemTest extends TestCase
 {

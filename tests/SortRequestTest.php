@@ -6,7 +6,7 @@ use Illuminate\Translation\ArrayLoader;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Validator;
 use PHPUnit\Framework\TestCase;
-use Thoss\GapSort\Support\Requests\SortRequest;
+use Thoss\GapSort\Requests\SortRequest;
 
 final class SortRequestTest extends TestCase
 {
