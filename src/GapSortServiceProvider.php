@@ -4,7 +4,7 @@ namespace Thoss\GapSort;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Thoss\GapSort\Resource\SortResourceRegistrar;
+use Thoss\GapSort\Resources\SortResourceRegistrar;
 
 class GapSortServiceProvider extends PackageServiceProvider
 {

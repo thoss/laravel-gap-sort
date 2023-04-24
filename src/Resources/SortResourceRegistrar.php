@@ -1,6 +1,6 @@
 <?php
 
-namespace Thoss\GapSort\Resource;
+namespace Thoss\GapSort\Resources;
 
 use Illuminate\Routing\ResourceRegistrar as OriginalRegistrar;
 
