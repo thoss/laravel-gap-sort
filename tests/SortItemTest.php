@@ -16,6 +16,10 @@ final class SortItemTest extends TestCase
     protected $request = null;
     protected $sortItem = null;
 
+    public const SORT_COLUM = 'order';
+
+    public const SORT_GAP = 100;
+
     /**
      * Define environment setup.
      *
@@ -25,8 +29,8 @@ final class SortItemTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('laravel-gap-sort.sorting.gap', 100);
-        $app['config']->set('laravel-gap-sort.sorting.column', 'order');
+        $app['config']->set('laravel-gap-sort.sorting.gap', self::SORT_GAP);
+        $app['config']->set('laravel-gap-sort.sorting.column', self::SORT_COLUM);
 
         $this->sortItem = new SortItem(User::class);
 
@@ -55,7 +59,8 @@ final class SortItemTest extends TestCase
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('order')->nullable();
+            $table->string('name')->nullable();
+            $table->unsignedInteger(self::SORT_COLUM)->nullable();
             $table->timestamps();
         });
     }
@@ -65,7 +70,13 @@ final class SortItemTest extends TestCase
         $users = collect([]);
 
         for ($i = 0; $i < $count; ++$i) {
-            $users->push(User::create());
+            $user = new User([
+                'name' => 'Test-'.$i,
+            ]);
+
+            $user->save();
+
+            $users->push($user);
         }
 
         return $users;
@@ -73,13 +84,11 @@ final class SortItemTest extends TestCase
 
     public function testCreatingModelsWithCorrectOrder()
     {
-        $users = $this->createUsers(5);
+        $users = $this->createUsers(10);
 
-        $users->each(function ($u) {
-            dd($u->order);
+        $users->each(function ($user, $index) {
+            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $user->order);
         });
-
-        dd($users);
     }
 }
 
@@ -87,5 +96,7 @@ class User extends Eloquent
 {
     use Sortable;
 
-    protected $fillable = ['order'];
+    protected $fillable = [
+        'name',
+    ];
 }
