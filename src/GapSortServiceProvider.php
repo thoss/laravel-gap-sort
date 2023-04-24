@@ -13,6 +13,8 @@ class GapSortServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-gap-sort')
             ->hasConfigFile();
+
+        $this->resourceRegistrar();
     }
 
     protected function resourceRegistrar()
