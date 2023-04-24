@@ -17,7 +17,7 @@ class GapSortServiceProvider extends PackageServiceProvider
 
     protected function resourceRegistrar()
     {
-        if (false === config('da-helper.resource_registrar')) {
+        if (false === config('laravel-gap-sort.resource_registrar')) {
             return;
         }
 

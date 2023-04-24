@@ -125,8 +125,8 @@ class SortItem
     {
         $this->model = new $modelString();
         $this->table = $this->model->getTable();
-        $this->gap = config('da-helper.sorting.gap');
-        $this->orderColumn = config('da-helper.sorting.column');
+        $this->gap = config('laravel-gap-sort.sorting.gap');
+        $this->orderColumn = config('laravel-gap-sort.sorting.column');
         $this->main = $main;
         $this->next = $next;
         $this->previous = $previous;
