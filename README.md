@@ -2,7 +2,9 @@
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
-beschreibung
+This package provides a way to sort items in a table using the "Gap" algorithm, which is a more efficient way of reordering items in a table than using incremental values. It takes into account the gap between the order values of adjacent items and calculates the new order value for the main item based on the positions of the previous and next items.
+
+[Description of the class](SORTITEM_DESCRIPTION.md)
 
 ## Installation
 
@@ -147,7 +149,3 @@ vendor/bin/phpunit
 ## Alternatives
 - [Laravel Sortable](https://github.com/ninoman/laravel-sortable)
 - [Eloquent-sortable](https://github.com/spatie/eloquent-sortable)
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
