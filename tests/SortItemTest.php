@@ -75,6 +75,10 @@ final class SortItemTest extends TestCase
     {
         $users = $this->createUsers(5);
 
+        $users->each(function ($u) {
+            dd($u->order);
+        });
+
         dd($users);
     }
 }
