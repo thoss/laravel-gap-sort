@@ -23,9 +23,6 @@
     "illuminate/support": "^9.0|^10.0",
     "spatie/laravel-package-tools": "^1.9"
   },
-  "require-dev": {
-    "pestphp/pest-plugin-laravel": "^2.0"
-  },
   "autoload": {
     "psr-4": {
       "Thoss\\GapSort\\": "src/"
@@ -46,11 +43,6 @@
       "providers": [
         "Thoss\\GapSort\\GapSortServiceProvider"
       ]
-    }
-  },
-  "config": {
-    "allow-plugins": {
-      "pestphp/pest-plugin": true
     }
   }
 }
