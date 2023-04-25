@@ -116,7 +116,7 @@ class SortModel
             return null;
         }
 
-        $newOrder = $prevOrder + (($diff) / 2);
+        $newOrder = $prevOrder + (($diff) / 3);
         $hasGap = $newOrder >= 1;
 
         return $hasGap ? (int) $newOrder : null;
