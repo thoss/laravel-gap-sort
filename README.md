@@ -8,7 +8,9 @@ This package provides a way to sort items in a table using the "Gap" algorithm, 
 
 ## Requirement
 
-PHP 8.1 and Laravel 9/10
+- PHP 8.1
+- Laravel 9/10
+- Your order column must be an integer. recommended ist unsignedInteger
 
 ## Installation
 
