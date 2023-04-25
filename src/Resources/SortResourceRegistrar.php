@@ -6,6 +6,14 @@ use Illuminate\Routing\ResourceRegistrar as OriginalRegistrar;
 
 class SortResourceRegistrar extends OriginalRegistrar
 {
+    /**
+     * Route a resource to a controller.
+     *
+     * @param string $name
+     * @param string $controller
+     *
+     * @return \Illuminate\Routing\RouteCollection
+     */
     public function register($name, $controller, array $options = [])
     {
         // Werden weitere Routen benötigt, müssen die mit dem Parameter 'with' gesetzt werden
@@ -21,7 +29,7 @@ class SortResourceRegistrar extends OriginalRegistrar
             }
         }
 
-        parent::register($name, $controller, $options);
+        return parent::register($name, $controller, $options);
     }
 
     /**

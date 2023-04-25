@@ -1,4 +1,4 @@
-This is a PHP class that handles sorting of items in a table using the "Gap" algorithm. The class is called "SortItem" and has several protected properties and public methods.
+This is a PHP class that handles sorting of items in a table using the "Gap" algorithm. The class is called "SortModel" and has several protected properties and public methods.
 
 The protected properties are:
 

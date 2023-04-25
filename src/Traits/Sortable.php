@@ -8,11 +8,13 @@ trait Sortable
     public static function bootSortable()
     {
         static::creating(function ($model) {
-            $gap = config('laravel-gap-sort.sorting.gap');
-            $lastItem = $model->orderBy(config('laravel-gap-sort.sorting.column'), 'DESC')->first();
-            $newOrder = null !== $lastItem ? $lastItem->order + $gap : $gap;
+            $gap = config('laravel-gap-sort.order_gap');
+            $orderColumn = config('laravel-gap-sort.order_column');
 
-            $model->order = $newOrder;
+            $lastItem = $model->orderBy($orderColumn, 'DESC')->first();
+            $newOrder = null !== $lastItem ? $lastItem->{$orderColumn} + $gap : $gap;
+
+            $model->{$orderColumn} = $newOrder;
         });
     }
 }

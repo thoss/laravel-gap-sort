@@ -3,9 +3,11 @@
 namespace Thoss\GapSort;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class SortItem
+/**
+ * Summary of SortModel.
+ */
+class SortModel
 {
     protected $model = null;
     protected $orderColumn = null;
@@ -14,9 +16,11 @@ class SortItem
     protected $next = null;
     protected $previous = null;
     protected $initTable = false;
-    protected $table = null;
 
-    public function handle(Request $request = null)
+    /**
+     * Summary of handle.
+     */
+    public function handle(Request $request = null): void
     {
         if ($this->initTable) {
             // Die Tabelle wird nur initial neu sortiert
@@ -30,14 +34,14 @@ class SortItem
         $this->previous = $this->previous ?? $request->get('previous');
 
         $mainItem = $this->model->findOrFail($this->main);
-        $newOrder = $this->getNewOrder($request);
+        $newOrder = $this->getNewOrder();
 
         if (null === $newOrder) {
             // Die Tabelle muss neu sortiert werden
             $this->initSortTable();
 
             // order nochmal neu berechnen
-            $newOrder = $this->getNewOrder($request);
+            $newOrder = $this->getNewOrder();
         }
 
         $this->updateOrder($mainItem, $newOrder);
@@ -46,25 +50,23 @@ class SortItem
     /**
      * Aktualisiert den Wert der order Column ohne die save Methode zu verwenden.
      */
-    protected function updateOrder($model, $value)
+    protected function updateOrder(object $model, $value): void
     {
-        DB::table($this->table)
-        ->where('id', $model->id)
-        ->update([
-            $this->orderColumn => $value,
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+        $obj = $this->model->find($model->id);
+
+        if ($obj) {
+            $obj->{$this->orderColumn} = $value;
+            $obj->saveQuietly();
+        }
     }
 
     /**
      * Die Tabelle wird mit dem Gap neu aufgebaut.
-     *
-     * @return void
      */
-    protected function initSortTable()
+    protected function initSortTable(): void
     {
-        DB::table($this->table)
-        ->select('id')
+        $this->model
+        ->select($this->model->getKeyName())
         ->orderBy($this->orderColumn)
         ->get()
         ->each(function ($item, $index) {
@@ -77,12 +79,8 @@ class SortItem
     /**
      * Berechnet die neue order für das main Item (Mitte zwischen prev und next)
      * null = Es gibt kein Gap mehr, die Tabelle muss neu initial sortiert werden.
-     *
-     * @param [type] $request
-     *
-     * @return int|null
      */
-    protected function getNewOrder($request)
+    protected function getNewOrder(): ?int
     {
         $previous = $this->previous;
 
@@ -121,12 +119,20 @@ class SortItem
         return $hasGap ? (int) $newOrder : null;
     }
 
-    public function __construct($modelString, $main = null, $next = null, $previous = null, $initTable = false)
+    /**
+     * Summary of __construct.
+     *
+     * @param mixed $modelString
+     * @param mixed $main
+     * @param mixed $next
+     * @param mixed $previous
+     * @param mixed $initTable
+     */
+    public function __construct(string $modelString, $main = null, $next = null, $previous = null, bool $initTable = false)
     {
         $this->model = new $modelString();
-        $this->table = $this->model->getTable();
-        $this->gap = config('laravel-gap-sort.sorting.gap');
-        $this->orderColumn = config('laravel-gap-sort.sorting.column');
+        $this->gap = config('laravel-gap-sort.order_gap');
+        $this->orderColumn = config('laravel-gap-sort.order_column');
         $this->main = $main;
         $this->next = $next;
         $this->previous = $previous;

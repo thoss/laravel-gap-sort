@@ -2,19 +2,19 @@
 
 namespace Thoss\GapSort\Tests;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
-use Thoss\GapSort\SortItem;
+use Thoss\GapSort\SortModel;
 use Thoss\GapSort\Traits\Sortable;
 
 final class SortItemTest extends TestCase
 {
-    protected $request = null;
-    protected $sortItem = null;
+    public const SORT_COLUM = 'custom_order';
+
+    public const SORT_GAP = 100;
 
     /**
      * Define environment setup.
@@ -25,10 +25,8 @@ final class SortItemTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('laravel-gap-sort.sorting.gap', 100);
-        $app['config']->set('laravel-gap-sort.sorting.column', 'order');
-
-        $this->sortItem = new SortItem(User::class);
+        $app['config']->set('laravel-gap-sort.order_gap', self::SORT_GAP);
+        $app['config']->set('laravel-gap-sort.order_column', self::SORT_COLUM);
 
         Carbon::setTestNow(Carbon::now());
 
@@ -39,7 +37,6 @@ final class SortItemTest extends TestCase
         ]);
 
         $this->createSchema();
-        $this->request = Request::create('', 'POST');
     }
 
     /**
@@ -48,85 +45,154 @@ final class SortItemTest extends TestCase
     protected function tearDown(): void
     {
         Carbon::setTestNow(null);
-        Schema::drop('users');
+        Schema::drop('dummies');
     }
 
     protected function createSchema()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('dummies', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('order')->nullable();
+            $table->string('name')->nullable();
+            $table->unsignedInteger(self::SORT_COLUM)->nullable();
             $table->timestamps();
         });
     }
 
-    protected function setAndGet($orders, $requestBody)
+    protected function createDummies($count = 1)
     {
-        // create User
-        foreach ($orders as $order) {
-            User::create(['order' => $order]);
-        }
-
-        // set request body
-        $this->request->merge($requestBody);
-
-        $this->sortItem->handle($this->request);
-
-        return (object) [
-            'main' => isset($requestBody['main']) ? User::find($requestBody['main']) : null,
-            'previous' => isset($requestBody['previous']) ? User::find($requestBody['previous']) : null,
-            'next' => isset($requestBody['next']) ? User::find($requestBody['next']) : null,
-        ];
+        return collect(range(1, $count))->map(function (int $i) {
+            return Dummy::create([
+                'name' => 'Test-'.$i,
+                self::SORT_COLUM => $i * self::SORT_GAP, // TODO: Das müsste der Sortable Trait übernehmen
+            ]);
+        });
     }
 
-    public function testNoGap()
+    public function testCreatingModelsWithCorrectOrder()
     {
-        $users = $this->setAndGet([1, 2, 3], [
-            'main' => 1,
-            'previous' => 2,
-            'next' => 3,
-        ]);
+        $dummies = $this->createDummies(10);
 
-        // ob Gap zwischen orders erstellt wurde
-        $diffMainAndPrevious = $users->main->order - $users->previous->order;
-        $diffNextAndMain = $users->next->order - $users->main->order;
-
-        $this->assertTrue($diffMainAndPrevious > 1 && $diffNextAndMain > 1);
-
-        // ob Items richtig sortiert wurden
-        $this->assertTrue($users->main->order > $users->previous->order && $users->main->order < $users->next->order);
+        $dummies->each(function ($dummy, $index) {
+            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $dummy->{self::SORT_COLUM});
+        });
     }
 
-    public function testWithoutNextItem()
+    public function testInitializeTable()
     {
-        $users = $this->setAndGet([1, 100], [
-            'main' => 1,
-            'previous' => 2,
+        $dummies = $this->createDummies(10);
+
+        // Reset to 0
+        Dummy::whereIn('id', $dummies->pluck('id')->toArray())
+        ->update([
+            self::SORT_COLUM => 0,
         ]);
 
-        $diffMainAndPrevious = $users->main->order - $users->previous->order;
+        $dummies = Dummy::all();
 
-        // wenn Gap > 1 wäre, ist MainOrder so oder so großer. D.h. richtig sortiert
-        $this->assertTrue($diffMainAndPrevious > 1);
+        // Assert 0
+        $dummies->each(function ($dummy) {
+            $this->assertEquals(0, $dummy->{self::SORT_COLUM});
+        });
+
+        // Init the table
+        dispatch(new SortModel(modelString: Dummy::class, initTable:true));
+        
+        $dummies = Dummy::all();
+
+        $dummies->each(function ($dummy, $index) {
+            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $dummy->{self::SORT_COLUM});
+        });
     }
 
-    public function testWithoutPrevious()
-    {
-        $users = $this->setAndGet([1, 100], [
-            'main' => 2,
-            'next' => 1,
-        ]);
+    public function testMultipleOperationsWithReInitTable () {
+        $this->createDummies(3);
 
-        $diffNextAndMain = $users->next->order - $users->main->order;
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:1, next:2));
 
-        // wenn Gap > 1 wäre, ist MainOrder so oder so großer. D.h. richtig sortiert
-        $this->assertTrue($diffNextAndMain > 1);
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(150, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(200, $sortedDummies[2]->{self::SORT_COLUM});
+
+        dispatch(new SortModel(modelString: Dummy::class, main:2, previous:1, next:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(125, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(150, $sortedDummies[2]->{self::SORT_COLUM});
+        
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:2, next:1));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+        
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(112, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(125, $sortedDummies[2]->{self::SORT_COLUM});
+
+        dispatch(new SortModel(modelString: Dummy::class, main:2, previous:1, next:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(106, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(112, $sortedDummies[2]->{self::SORT_COLUM});
+        
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:1, next:2));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(103, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(106, $sortedDummies[2]->{self::SORT_COLUM});
+
+        dispatch(new SortModel(modelString: Dummy::class, main:2, previous:1, next:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+        
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(101, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(103, $sortedDummies[2]->{self::SORT_COLUM});
+        
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:1, next:2));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        // new order after reinitialize table
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(150, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(200, $sortedDummies[2]->{self::SORT_COLUM});
+    }
+
+    public function testOrderVeryFirst () {
+        $this->createDummies(3);
+
+        dispatch(new SortModel(modelString: Dummy::class, main:3, next:1));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals($sortedDummies->where('id', 3)->first()->id, $sortedDummies[0]->id);
+        $this->assertEquals($sortedDummies->where('id', 1)->first()->id, $sortedDummies[1]->id);
+        $this->assertEquals($sortedDummies->where('id', 2)->first()->id, $sortedDummies[2]->id);
+    }
+
+    public function testOrderVeryLast () {
+        $this->createDummies(3);
+
+        dispatch(new SortModel(modelString: Dummy::class, main:1, previous:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals($sortedDummies->where('id', 2)->first()->id, $sortedDummies[0]->id);
+        $this->assertEquals($sortedDummies->where('id', 3)->first()->id, $sortedDummies[1]->id);
+        $this->assertEquals($sortedDummies->where('id', 1)->first()->id, $sortedDummies[2]->id);
     }
 }
 
-class User extends Eloquent
+class Dummy extends Model
 {
     use Sortable;
 
-    protected $fillable = ['order'];
+    protected $guarded = [];
 }
