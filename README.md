@@ -25,7 +25,7 @@ composer require thoss/laravel-gap-sort
 Optionally you can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag=laravel-gap-sort-config
+php artisan vendor:publish --tag=gap-sort-config
 ```
 
 This is the content of the file that will be published in `config/laravel-gap-sort.php`
