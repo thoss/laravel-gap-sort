@@ -2,6 +2,7 @@
 
 namespace Thoss\GapSort;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 /**
@@ -20,13 +21,13 @@ class SortModel
     /**
      * Summary of handle.
      */
-    public function handle(Request $request = null): void
+    public function handle(Request $request = null): ?Model
     {
         if ($this->initTable) {
             // Die Tabelle wird nur initial neu sortiert
             $this->initSortTable();
 
-            return;
+            return null;
         }
 
         $this->main = $this->main ?? $request->get('main');
@@ -44,13 +45,13 @@ class SortModel
             $newOrder = $this->getNewOrder();
         }
 
-        $this->updateOrder($mainItem, $newOrder);
+        return $this->updateOrder($mainItem, $newOrder);
     }
 
     /**
      * Aktualisiert den Wert der order Column ohne die save Methode zu verwenden.
      */
-    protected function updateOrder(object $model, $value): void
+    protected function updateOrder(object $model, $value): ?Model
     {
         $obj = $this->model->find($model->id);
 
@@ -58,6 +59,8 @@ class SortModel
             $obj->{$this->orderColumn} = $value;
             $obj->saveQuietly();
         }
+
+        return $obj;
     }
 
     /**
