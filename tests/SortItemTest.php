@@ -158,11 +158,19 @@ final class SortItemTest extends TestCase
         dispatch(new SortItem(modelString: Dummy::class, main:3, previous:1, next:2));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
-        
+
         // new order after reinitialize table
         $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
         $this->assertEquals(150, $sortedDummies[1]->{self::SORT_COLUM});
         $this->assertEquals(200, $sortedDummies[2]->{self::SORT_COLUM});
+    }
+
+    public function testOrderVeryFirst () {
+
+    }
+
+    public function testOrderVeryLast () {
+
     }
 }
 
