@@ -110,7 +110,7 @@ After Sort:
 ```
 
 
-Item1 is sorted to the very end
+Item1 is sorted to the last
 ```
 Current List:
 - Item1 (order 100)
@@ -120,7 +120,7 @@ Current List:
 POST /api/myresource/sort
 {
     "main": 1,
-    "previous": 2, 
+    "previous": 3, 
 }
 
 After Sort:
@@ -129,7 +129,7 @@ After Sort:
 - Item1 (order 400)
 ```
 
-Item3 is sorted to the very front
+Item3 is sorted to the first
 ```
 Current List:
 - Item1 (order 100)
@@ -139,7 +139,7 @@ Current List:
 POST /api/myresource/sort
 {
     "main": 3,
-    "next": 2, 
+    "next": 1, 
 }
 
 After Sort:

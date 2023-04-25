@@ -166,11 +166,27 @@ final class SortItemTest extends TestCase
     }
 
     public function testOrderVeryFirst () {
+        $this->createDummies(3);
 
+        dispatch(new SortItem(modelString: Dummy::class, main:3, next:1));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals($sortedDummies->where('id', 3)->first()->id, $sortedDummies[0]->id);
+        $this->assertEquals($sortedDummies->where('id', 1)->first()->id, $sortedDummies[1]->id);
+        $this->assertEquals($sortedDummies->where('id', 2)->first()->id, $sortedDummies[2]->id);
     }
 
     public function testOrderVeryLast () {
+        $this->createDummies(3);
 
+        dispatch(new SortItem(modelString: Dummy::class, main:1, previous:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals($sortedDummies->where('id', 2)->first()->id, $sortedDummies[0]->id);
+        $this->assertEquals($sortedDummies->where('id', 3)->first()->id, $sortedDummies[1]->id);
+        $this->assertEquals($sortedDummies->where('id', 1)->first()->id, $sortedDummies[2]->id);
     }
 }
 
