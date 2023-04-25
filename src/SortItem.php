@@ -55,7 +55,7 @@ class SortItem
     protected function updateOrder($model, $value): void
     {
         DB::table($this->table)
-        ->where('id', $model->id)
+        ->where($this->model->getKeyName(), $model->id)
         ->update([
             $this->orderColumn => $value,
             'updated_at' => date('Y-m-d H:i:s'),
@@ -68,7 +68,7 @@ class SortItem
     protected function initSortTable(): void
     {
         DB::table($this->table)
-        ->select('id')
+        ->select($this->model->getKeyName())
         ->orderBy($this->orderColumn)
         ->get()
         ->each(function ($item, $index) {
