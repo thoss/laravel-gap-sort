@@ -29,8 +29,8 @@ final class SortItemTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('laravel-gap-sort.sorting.gap', self::SORT_GAP);
-        $app['config']->set('laravel-gap-sort.sorting.column', self::SORT_COLUM);
+        $app['config']->set('laravel-gap-sort.order_gap', self::SORT_GAP);
+        $app['config']->set('laravel-gap-sort.order_column', self::SORT_COLUM);
 
         $this->sortItem = new SortItem(Dummy::class);
 
