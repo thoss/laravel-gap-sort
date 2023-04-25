@@ -64,7 +64,7 @@ To add sortable behaviour to your model you must:
 4. You can initialize an existing Table with the order gap, maybe in a Migration file
 
 ```php
-dispatch(new SortItem(modelString: YourModel::class, initTable:true));
+dispatch(new SortModel(modelString: YourModel::class, initTable:true));
 ```
 
 ### Use the sorting with an REST API
@@ -74,15 +74,15 @@ dispatch(new SortItem(modelString: YourModel::class, initTable:true));
 ```php
 Route::resource('salutations', 'SalutationsController', ['with' => ['sort']]);
 ```
-2. Dispatch  the `SortItem` Job in your Controller
+2. Dispatch  the `SortModel` Job in your Controller
 
 ```php
 use Thoss\GapSort\Requests\SortRequest;
-use Thoss\GapSort\SortItem;
+use Thoss\GapSort\SortModel;
 
 public function sort(SortRequest $request)
 {
-    return $this->dispatchSync(new SortItem(MyModel::class));
+    return $this->dispatchSync(new SortModel(MyModel::class));
 }
 ```
 

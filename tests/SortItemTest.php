@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
-use Thoss\GapSort\SortItem;
+use Thoss\GapSort\SortModel;
 use Thoss\GapSort\Traits\Sortable;
 
 final class SortItemTest extends TestCase
@@ -95,7 +95,7 @@ final class SortItemTest extends TestCase
         });
 
         // Init the table
-        dispatch(new SortItem(modelString: Dummy::class, initTable:true));
+        dispatch(new SortModel(modelString: Dummy::class, initTable:true));
         
         $dummies = Dummy::all();
 
@@ -107,7 +107,7 @@ final class SortItemTest extends TestCase
     public function testMultipleOperationsWithReInitTable () {
         $this->createDummies(3);
 
-        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:1, next:2));
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:1, next:2));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
 
@@ -115,7 +115,7 @@ final class SortItemTest extends TestCase
         $this->assertEquals(150, $sortedDummies[1]->{self::SORT_COLUM});
         $this->assertEquals(200, $sortedDummies[2]->{self::SORT_COLUM});
 
-        dispatch(new SortItem(modelString: Dummy::class, main:2, previous:1, next:3));
+        dispatch(new SortModel(modelString: Dummy::class, main:2, previous:1, next:3));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
 
@@ -123,7 +123,7 @@ final class SortItemTest extends TestCase
         $this->assertEquals(125, $sortedDummies[1]->{self::SORT_COLUM});
         $this->assertEquals(150, $sortedDummies[2]->{self::SORT_COLUM});
         
-        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:2, next:1));
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:2, next:1));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
         
@@ -131,7 +131,7 @@ final class SortItemTest extends TestCase
         $this->assertEquals(112, $sortedDummies[1]->{self::SORT_COLUM});
         $this->assertEquals(125, $sortedDummies[2]->{self::SORT_COLUM});
 
-        dispatch(new SortItem(modelString: Dummy::class, main:2, previous:1, next:3));
+        dispatch(new SortModel(modelString: Dummy::class, main:2, previous:1, next:3));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
 
@@ -139,7 +139,7 @@ final class SortItemTest extends TestCase
         $this->assertEquals(106, $sortedDummies[1]->{self::SORT_COLUM});
         $this->assertEquals(112, $sortedDummies[2]->{self::SORT_COLUM});
         
-        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:1, next:2));
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:1, next:2));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
 
@@ -147,7 +147,7 @@ final class SortItemTest extends TestCase
         $this->assertEquals(103, $sortedDummies[1]->{self::SORT_COLUM});
         $this->assertEquals(106, $sortedDummies[2]->{self::SORT_COLUM});
 
-        dispatch(new SortItem(modelString: Dummy::class, main:2, previous:1, next:3));
+        dispatch(new SortModel(modelString: Dummy::class, main:2, previous:1, next:3));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
         
@@ -155,7 +155,7 @@ final class SortItemTest extends TestCase
         $this->assertEquals(101, $sortedDummies[1]->{self::SORT_COLUM});
         $this->assertEquals(103, $sortedDummies[2]->{self::SORT_COLUM});
         
-        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:1, next:2));
+        dispatch(new SortModel(modelString: Dummy::class, main:3, previous:1, next:2));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
 
@@ -168,7 +168,7 @@ final class SortItemTest extends TestCase
     public function testOrderVeryFirst () {
         $this->createDummies(3);
 
-        dispatch(new SortItem(modelString: Dummy::class, main:3, next:1));
+        dispatch(new SortModel(modelString: Dummy::class, main:3, next:1));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
 
@@ -180,7 +180,7 @@ final class SortItemTest extends TestCase
     public function testOrderVeryLast () {
         $this->createDummies(3);
 
-        dispatch(new SortItem(modelString: Dummy::class, main:1, previous:3));
+        dispatch(new SortModel(modelString: Dummy::class, main:1, previous:3));
 
         $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
 

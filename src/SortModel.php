@@ -5,9 +5,9 @@ namespace Thoss\GapSort;
 use Illuminate\Http\Request;
 
 /**
- * Summary of SortItem.
+ * Summary of SortModel.
  */
-class SortItem
+class SortModel
 {
     protected $model = null;
     protected $orderColumn = null;
