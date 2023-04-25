@@ -34,14 +34,14 @@ class SortItem
         $this->previous = $this->previous ?? $request->get('previous');
 
         $mainItem = $this->model->findOrFail($this->main);
-        $newOrder = $this->getNewOrder($request);
+        $newOrder = $this->getNewOrder();
 
         if (null === $newOrder) {
             // Die Tabelle muss neu sortiert werden
             $this->initSortTable();
 
             // order nochmal neu berechnen
-            $newOrder = $this->getNewOrder($request);
+            $newOrder = $this->getNewOrder();
         }
 
         $this->updateOrder($mainItem, $newOrder);
@@ -50,7 +50,7 @@ class SortItem
     /**
      * Aktualisiert den Wert der order Column ohne die save Methode zu verwenden.
      */
-    protected function updateOrder($model, $value): void
+    protected function updateOrder(object $model, $value): void
     {
         $obj = $this->model->find($model->id);
 
@@ -79,10 +79,8 @@ class SortItem
     /**
      * Berechnet die neue order für das main Item (Mitte zwischen prev und next)
      * null = Es gibt kein Gap mehr, die Tabelle muss neu initial sortiert werden.
-     *
-     * @param [type] $request
      */
-    protected function getNewOrder($request): ?int
+    protected function getNewOrder(): ?int
     {
         $previous = $this->previous;
 
@@ -130,7 +128,7 @@ class SortItem
      * @param mixed $previous
      * @param mixed $initTable
      */
-    public function __construct($modelString, $main = null, $next = null, $previous = null, $initTable = false)
+    public function __construct(string $modelString, $main = null, $next = null, $previous = null, bool $initTable = false)
     {
         $this->model = new $modelString();
         $this->gap = config('laravel-gap-sort.order_gap');
