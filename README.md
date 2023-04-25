@@ -72,7 +72,7 @@ dispatch(new SortItem(modelString: YourModel::class, initTable:true));
 ```php
 Route::resource('salutations', 'SalutationsController', ['with' => ['sort']]);
 ```
-2. Dispatch  the `SortItem` Job
+2. Dispatch  the `SortItem` Job in your Controller
 
 ```php
 use Thoss\GapSort\Requests\SortRequest;
@@ -155,5 +155,5 @@ vendor/bin/phpunit
 ```
 
 ## Alternatives
-- [Laravel Sortable](https://github.com/ninoman/laravel-sortable)
-- [Eloquent-sortable](https://github.com/spatie/eloquent-sortable)
+- [https://github.com/ninoman/laravel-sortable](https://github.com/ninoman/laravel-sortable)
+- [https://github.com/spatie/eloquent-sortable](https://github.com/spatie/eloquent-sortable)
