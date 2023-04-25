@@ -87,7 +87,7 @@ public function sort(SortRequest $request)
 ```
 
 
-## Example Requests
+## Example Requests with a 100 gap
 
 Item1 is sorted between 2 and 3
 ```
@@ -126,7 +126,7 @@ POST /api/myresource/sort
 After Sort:
 - Item2 (order 200)
 - Item3 (order 300)
-- Item1 (order 400)
+- Item1 (order 350)
 ```
 
 Item3 is sorted to the first
@@ -144,8 +144,8 @@ POST /api/myresource/sort
 
 After Sort:
 - Item3 (order 50)
+- Item1 (order 100)
 - Item2 (order 200)
-- Item1 (order 300)
 ```
 
 ## Tests
