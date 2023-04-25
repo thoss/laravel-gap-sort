@@ -3,7 +3,6 @@
 namespace Thoss\GapSort;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Summary of SortItem.
@@ -53,12 +52,12 @@ class SortItem
      */
     protected function updateOrder($model, $value): void
     {
-        DB::table($this->model->getTable())
-        ->where($this->model->getKeyName(), $model->id)
-        ->update([
-            $this->orderColumn => $value,
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
+        $obj = $this->model->find($model->id);
+
+        if ($obj) {
+            $obj->{$this->orderColumn} = $value;
+            $obj->saveQuietly();
+        }
     }
 
     /**
@@ -66,7 +65,7 @@ class SortItem
      */
     protected function initSortTable(): void
     {
-        DB::table($this->model->getTable())
+        $this->model
         ->select($this->model->getKeyName())
         ->orderBy($this->orderColumn)
         ->get()
@@ -122,6 +121,15 @@ class SortItem
         return $hasGap ? (int) $newOrder : null;
     }
 
+    /**
+     * Summary of __construct.
+     *
+     * @param mixed $modelString
+     * @param mixed $main
+     * @param mixed $next
+     * @param mixed $previous
+     * @param mixed $initTable
+     */
     public function __construct($modelString, $main = null, $next = null, $previous = null, $initTable = false)
     {
         $this->model = new $modelString();
