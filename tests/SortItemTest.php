@@ -79,8 +79,35 @@ final class SortItemTest extends TestCase
     {
         $dummies = $this->createDummies(10);
 
-        $dummies->each(function ($user, $index) {
-            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $user->{self::SORT_COLUM});
+        $dummies->each(function ($dummy, $index) {
+            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $dummy->{self::SORT_COLUM});
+        });
+    }
+
+    public function testInitializeTable()
+    {
+        $dummies = $this->createDummies(10);
+
+        // Reset to 0
+        Dummy::whereIn('id', $dummies->pluck('id')->toArray())
+        ->update([
+            self::SORT_COLUM => 0,
+        ]);
+
+        $dummies = Dummy::all();
+
+        // Assert 0
+        $dummies->each(function ($dummy) {
+            $this->assertEquals(0, $dummy->{self::SORT_COLUM});
+        });
+
+        // Init the table
+        dispatch(new SortItem(modelString: Dummy::class, initTable:true));
+        
+        $dummies = Dummy::all();
+
+        $dummies->each(function ($dummy, $index) {
+            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $dummy->{self::SORT_COLUM});
         });
     }
 }

@@ -61,6 +61,12 @@ To add sortable behaviour to your model you must:
 
 > The larger the gap, the lower the probability that the table will have to be reinitialized
 
+4. You can initialize an existing Table with the order gap, maybe in a Migration file
+
+```php
+dispatch(new SortItem(modelString: YourModel::class, initTable:true));
+```
+
 ### Use the sorting with an REST API
 
 1. register `/sort` Route  
