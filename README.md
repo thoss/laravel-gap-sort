@@ -10,7 +10,7 @@ This package provides a way to sort items in a table using the "Gap" algorithm, 
 
 - PHP 8.1
 - Laravel 9/10
-- Your order column must be an integer. recommended ist unsignedInteger
+- Your order column must be an integer (recommended is unsigned integer)
 
 ## Installation
 
