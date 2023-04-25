@@ -4,7 +4,6 @@ namespace Thoss\GapSort\Tests;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
@@ -13,9 +12,6 @@ use Thoss\GapSort\Traits\Sortable;
 
 final class SortItemTest extends TestCase
 {
-    protected $request = null;
-    protected $sortItem = null;
-
     public const SORT_COLUM = 'custom_order';
 
     public const SORT_GAP = 100;
@@ -32,8 +28,6 @@ final class SortItemTest extends TestCase
         $app['config']->set('laravel-gap-sort.order_gap', self::SORT_GAP);
         $app['config']->set('laravel-gap-sort.order_column', self::SORT_COLUM);
 
-        $this->sortItem = new SortItem(Dummy::class);
-
         Carbon::setTestNow(Carbon::now());
 
         $app['config']->set('database.default', 'test');
@@ -43,7 +37,6 @@ final class SortItemTest extends TestCase
         ]);
 
         $this->createSchema();
-        $this->request = Request::create('', 'POST');
     }
 
     /**

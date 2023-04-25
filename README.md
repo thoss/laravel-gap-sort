@@ -45,7 +45,7 @@ return [
     /*
     * Indicates wheter the "/sort" route will be automaticaly added when you use the route ::register method
     */
-    'resource_registrar' => false,
+    'resource_registrar_with_sort' => false,
 ];
 
 ```
