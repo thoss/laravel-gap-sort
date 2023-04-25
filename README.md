@@ -1,4 +1,4 @@
-# Sortable behaviour for Eloquent models
+# Sortable behaviour for Eloquent models with gap algorithm
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/thoss/laravel-gap-sort/run-tests.yml?branch=main&label=tests)
