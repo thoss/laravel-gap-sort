@@ -16,7 +16,7 @@ final class SortItemTest extends TestCase
     protected $request = null;
     protected $sortItem = null;
 
-    public const SORT_COLUM = 'order';
+    public const SORT_COLUM = 'custom_order';
 
     public const SORT_GAP = 100;
 
@@ -80,7 +80,7 @@ final class SortItemTest extends TestCase
         $dummies = $this->createDummies(10);
 
         $dummies->each(function ($user, $index) {
-            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $user->order);
+            $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $user->{self::SORT_COLUM});
         });
     }
 }
