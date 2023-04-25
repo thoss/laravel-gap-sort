@@ -103,6 +103,67 @@ final class SortItemTest extends TestCase
             $this->assertEquals((self::SORT_GAP * $index) + self::SORT_GAP, $dummy->{self::SORT_COLUM});
         });
     }
+
+    public function testMultipleOperationsWithReInitTable () {
+        $this->createDummies(3);
+
+        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:1, next:2));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(150, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(200, $sortedDummies[2]->{self::SORT_COLUM});
+
+        dispatch(new SortItem(modelString: Dummy::class, main:2, previous:1, next:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(125, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(150, $sortedDummies[2]->{self::SORT_COLUM});
+        
+        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:2, next:1));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+        
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(112, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(125, $sortedDummies[2]->{self::SORT_COLUM});
+
+        dispatch(new SortItem(modelString: Dummy::class, main:2, previous:1, next:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(106, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(112, $sortedDummies[2]->{self::SORT_COLUM});
+        
+        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:1, next:2));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(103, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(106, $sortedDummies[2]->{self::SORT_COLUM});
+
+        dispatch(new SortItem(modelString: Dummy::class, main:2, previous:1, next:3));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+        
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(101, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(103, $sortedDummies[2]->{self::SORT_COLUM});
+        
+        // new order after initialize table
+        dispatch(new SortItem(modelString: Dummy::class, main:3, previous:1, next:2));
+
+        $sortedDummies = Dummy::orderBy(self::SORT_COLUM)->get();
+        
+        $this->assertEquals(100, $sortedDummies[0]->{self::SORT_COLUM});
+        $this->assertEquals(150, $sortedDummies[1]->{self::SORT_COLUM});
+        $this->assertEquals(200, $sortedDummies[2]->{self::SORT_COLUM});
+    }
 }
 
 class Dummy extends Model
