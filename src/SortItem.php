@@ -17,7 +17,6 @@ class SortItem
     protected $next = null;
     protected $previous = null;
     protected $initTable = false;
-    protected $table = null;
 
     /**
      * Summary of handle.
@@ -54,7 +53,7 @@ class SortItem
      */
     protected function updateOrder($model, $value): void
     {
-        DB::table($this->table)
+        DB::table($this->model->getTable())
         ->where($this->model->getKeyName(), $model->id)
         ->update([
             $this->orderColumn => $value,
@@ -67,7 +66,7 @@ class SortItem
      */
     protected function initSortTable(): void
     {
-        DB::table($this->table)
+        DB::table($this->model->getTable())
         ->select($this->model->getKeyName())
         ->orderBy($this->orderColumn)
         ->get()
@@ -126,7 +125,6 @@ class SortItem
     public function __construct($modelString, $main = null, $next = null, $previous = null, $initTable = false)
     {
         $this->model = new $modelString();
-        $this->table = $this->model->getTable();
         $this->gap = config('laravel-gap-sort.order_gap');
         $this->orderColumn = config('laravel-gap-sort.order_column');
         $this->main = $main;
