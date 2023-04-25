@@ -1,6 +1,6 @@
 # Sortable behaviour for Eloquent models
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/thoss/laravel-gap-sort/run-tests.yml?branch=main&label=tests)
 [![Latest Version](https://img.shields.io/github/v/release/thoss/laravel-gap-sort.svg?style=flat-square)](https://github.com/thoss/laravel-gap-sort/releases)
 
