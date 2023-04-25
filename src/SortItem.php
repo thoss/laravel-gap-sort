@@ -5,6 +5,9 @@ namespace Thoss\GapSort;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Summary of SortItem.
+ */
 class SortItem
 {
     protected $model = null;
@@ -16,7 +19,10 @@ class SortItem
     protected $initTable = false;
     protected $table = null;
 
-    public function handle(Request $request = null)
+    /**
+     * Summary of handle.
+     */
+    public function handle(Request $request = null): void
     {
         if ($this->initTable) {
             // Die Tabelle wird nur initial neu sortiert
@@ -46,7 +52,7 @@ class SortItem
     /**
      * Aktualisiert den Wert der order Column ohne die save Methode zu verwenden.
      */
-    protected function updateOrder($model, $value)
+    protected function updateOrder($model, $value): void
     {
         DB::table($this->table)
         ->where('id', $model->id)
@@ -58,10 +64,8 @@ class SortItem
 
     /**
      * Die Tabelle wird mit dem Gap neu aufgebaut.
-     *
-     * @return void
      */
-    protected function initSortTable()
+    protected function initSortTable(): void
     {
         DB::table($this->table)
         ->select('id')
@@ -79,10 +83,8 @@ class SortItem
      * null = Es gibt kein Gap mehr, die Tabelle muss neu initial sortiert werden.
      *
      * @param [type] $request
-     *
-     * @return int|null
      */
-    protected function getNewOrder($request)
+    protected function getNewOrder($request): ?int
     {
         $previous = $this->previous;
 
