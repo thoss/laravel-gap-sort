@@ -53,14 +53,14 @@ class SortModel
      */
     protected function updateOrder(object $model, $value): ?Model
     {
-        $obj = $this->model->find($model->id);
+        $realModel = $this->model->find($model->id);
 
-        if ($obj) {
-            $obj->{$this->orderColumn} = $value;
-            $obj->saveQuietly();
+        if ($realModel !== null) {
+            $realModel->{$this->orderColumn} = $value;
+            $realModel->saveQuietly();
         }
 
-        return $obj;
+        return $realModel;
     }
 
     /**
