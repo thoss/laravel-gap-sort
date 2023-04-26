@@ -46,9 +46,11 @@
     "phpunit/phpunit": "^10.1",
     "orchestra/testbench": "^8.5",
     "pestphp/pest": "^2.5",
-    "pestphp/pest-plugin-laravel": "^2.0"
+    "pestphp/pest-plugin-laravel": "^2.0",
+    "nunomaduro/larastan": "^2.0"
   },
   "scripts": {
+    "analyse": "vendor/bin/phpstan analyse",
     "test": [
       "@putenv XDEBUG_MODE=coverage",
       "vendor/bin/pest"

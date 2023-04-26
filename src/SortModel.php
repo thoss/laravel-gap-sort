@@ -55,7 +55,7 @@ class SortModel
     {
         $realModel = $this->model->find($model->id);
 
-        if ($realModel !== null) {
+        if (null !== $realModel) {
             $realModel->{$this->orderColumn} = $value;
             $realModel->saveQuietly();
         }
@@ -125,11 +125,9 @@ class SortModel
     /**
      * Summary of __construct.
      *
-     * @param mixed $modelString
      * @param mixed $main
      * @param mixed $next
      * @param mixed $previous
-     * @param mixed $initTable
      */
     public function __construct(string $modelString, $main = null, $next = null, $previous = null, bool $initTable = false)
     {
