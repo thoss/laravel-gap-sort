@@ -155,7 +155,7 @@ After Sort:
 The package contains some tests, set up with Orchestra. The tests can be run via phpunit.
 
 ```bash
-vendor/bin/phpunit
+composer test
 ```
 
 ## Alternatives

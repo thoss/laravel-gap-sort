@@ -35,9 +35,6 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "scripts": {
-    "test": "vendor/bin/phpunit"
-  },
   "extra": {
     "laravel": {
       "providers": [
@@ -50,6 +47,10 @@
     "orchestra/testbench": "^8.5",
     "pestphp/pest": "^2.5",
     "pestphp/pest-plugin-laravel": "^2.0"
+  },
+  "scripts": {
+    "test": "vendor/bin/pest",
+    "test-coverage": "vendor/bin/pest --coverage"
   },
   "config": {
     "allow-plugins": {
