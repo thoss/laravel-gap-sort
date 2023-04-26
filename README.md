@@ -57,9 +57,9 @@ return [
 
 To add sortable behaviour to your model you must:
 
-1. Use the trait `Thoss\GapSort\Traits\Sortable`.
-2. Optionally specify which column will be used as the order column (unsignedInteger). The default is `sorting.column`.
-3. Optionally specify which gap between the sorted items you want to use. The default is `sorting.gap`.
+1. Use the trait `Thoss\GapSort\Traits\Sortable` in your Model.
+2. Optionally specify which column will be used as the order column. The default is `order_column`.
+3. Optionally specify which gap between the sorted items you want to use. The default is `order_gap`.
 
 > The larger the gap, the lower the probability that the table will have to be reinitialized
 
