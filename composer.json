@@ -49,8 +49,14 @@
     "pestphp/pest-plugin-laravel": "^2.0"
   },
   "scripts": {
-    "test": "vendor/bin/pest",
-    "test-coverage": "vendor/bin/pest --coverage"
+    "test": [
+      "@putenv XDEBUG_MODE=coverage",
+      "vendor/bin/pest"
+    ],
+    "test-coverage": [
+      "@putenv XDEBUG_MODE=coverage",
+      "vendor/bin/pest --coverage"
+    ]
   },
   "config": {
     "allow-plugins": {
