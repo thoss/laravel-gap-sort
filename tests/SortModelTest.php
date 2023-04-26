@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Thoss\GapSort\Tests\Dummy;
 
@@ -8,8 +9,8 @@ const SORT_GAP = 100;
 const SORT_COLUMN = 'custom_order';
 
 beforeAll(function () {
-    config()->set('gap-sort.order_gap', SORT_GAP);
-    config()->set('gap-sort.order_column', SORT_COLUMN);
+    Config::set('gap-sort.order_gap', SORT_GAP);
+    Config::set('gap-sort.order_column', SORT_COLUMN);
 
     Schema::create('dummies', function (Blueprint $table) {
         $table->increments('id');
