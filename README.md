@@ -6,7 +6,7 @@
 
 This package provides a way to sort items in a table using the "Gap" algorithm, which is a more efficient way of reordering items in a table than using incremental values. It takes into account the gap between the order values of adjacent items and calculates the new order value for the main item based on the positions of the previous and next items.
 
-[Description of the class Thoss\GapSort\SortItem](SORTITEM_DESCRIPTION.md)
+[Description of the class Thoss\GapSort\SortModel](SORTMODEL_DESCRIPTION.md)
 
 ## Requirement
 
