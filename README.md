@@ -30,7 +30,7 @@ Optionally you can publish the config file with:
 php artisan vendor:publish --tag=gap-sort-config
 ```
 
-This is the content of the file that will be published in `config/laravel-gap-sort.php`
+This is the content of the file that will be published in `config/gap-sort.php`
 
 ```php
 return [

@@ -25,8 +25,8 @@ final class SortItemTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('laravel-gap-sort.order_gap', self::SORT_GAP);
-        $app['config']->set('laravel-gap-sort.order_column', self::SORT_COLUM);
+        $app['config']->set('gap-sort.order_gap', self::SORT_GAP);
+        $app['config']->set('gap-sort.order_column', self::SORT_COLUM);
 
         Carbon::setTestNow(Carbon::now());
 

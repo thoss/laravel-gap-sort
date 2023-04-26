@@ -134,8 +134,8 @@ class SortModel
     public function __construct(string $modelString, $main = null, $next = null, $previous = null, bool $initTable = false)
     {
         $this->model = new $modelString();
-        $this->gap = config('laravel-gap-sort.order_gap');
-        $this->orderColumn = config('laravel-gap-sort.order_column');
+        $this->gap = config('gap-sort.order_gap');
+        $this->orderColumn = config('gap-sort.order_column');
         $this->main = $main;
         $this->next = $next;
         $this->previous = $previous;
