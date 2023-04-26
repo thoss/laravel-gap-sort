@@ -1,10 +1,26 @@
 <?php
 
-namespace Tests;
+namespace Thoss\GapSort\Tests;
 
-use PHPUnit\Framework\TestCase as BaseTestCase;
+use Orchestra\Testbench\TestCase as Orchestra;
+use Thoss\GapSort\GapSortServiceProvider;
 
-abstract class TestCase extends BaseTestCase
+class TestCase extends Orchestra
 {
-    //
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            GapSortServiceProvider::class,
+        ];
+    }
+
+    public function getEnvironmentSetUp($app)
+    {
+//        config()->set('database.default', 'testing');
+    }
 }

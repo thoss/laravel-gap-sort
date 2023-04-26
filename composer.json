@@ -30,7 +30,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Thoss\\GapSort\\Test\\": "tests"
+      "Thoss\\GapSort\\Tests\\": "tests"
     }
   },
   "minimum-stability": "dev",
