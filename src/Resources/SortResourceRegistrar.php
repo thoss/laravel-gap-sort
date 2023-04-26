@@ -16,9 +16,6 @@ class SortResourceRegistrar extends OriginalRegistrar
      */
     public function register($name, $controller, array $options = [])
     {
-        // Werden weitere Routen benötigt, müssen die mit dem Parameter 'with' gesetzt werden
-        $this->resourceDefaults = ['index', 'show', 'store', 'update', 'destroy'];
-
         if (isset($options['with'])) {
             if (!is_array($options['with'])) {
                 $options['with'] = [$options['with']];

@@ -1,77 +1,89 @@
 <?php
 
-namespace Thoss\GapSort\Tests;
-
 use Illuminate\Translation\ArrayLoader;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Validator;
-use PHPUnit\Framework\TestCase;
 use Thoss\GapSort\Requests\SortRequest;
 
-final class SortRequestTest extends TestCase
+function validate($data)
 {
-    protected $rules = null;
-    protected $transLang = 'en';
-    protected $request;
-
-    public function testValidationTrue()
-    {
-        $expectedTrue = $this->validate([
-            'main' => 25,
-            'previous' => 30,
-            'next' => 35,
-        ]);
-
-        $this->assertTrue($expectedTrue->passes());
-    }
-
-    public function testValidationFieldsShouldBeDeferent()
-    {
-        $expectedFalse = $this->validate([
-            'main' => 30,
-            'previous' => 30,
-            'next' => 35,
-        ]);
-
-        $this->assertFalse($expectedFalse->passes());
-    }
-
-    public function testValidationMainisRequired()
-    {
-        $expectedFalse = $this->validate([
-            'main' => null,
-            'previous' => 30,
-            'next' => 35,
-        ]);
-
-        $this->assertFalse($expectedFalse->passes());
-    }
-
-    public function testValidationOtherFieldsAreNullabe()
-    {
-        $expectedTrue = $this->validate([
-            'main' => 25,
-            'previous' => null,
-            'next' => null,
-        ]);
-
-        $this->assertTrue($expectedTrue->passes());
-    }
-
-    protected function validate($data)
-    {
-        $trans = new Translator(
+    $trans = new Translator(
             new ArrayLoader(),
-            $this->transLang
+            'en'
         );
 
-        return new Validator($trans, $data, $this->request->rules());
-    }
+    $request = app()->make(SortRequest::class);
+    $request->setMethod('POST');
 
-    /**is a template method and is run once for each test method*/
-    public function setUp(): void
-    {
-        $this->request = new SortRequest();
-        $this->request->setMethod('POST');
-    }
+    return new Validator($trans, $data, $request->rules());
 }
+
+it('can pass the validation rules', function () {
+    $expectedTrue = validate([
+        'main' => 25,
+        'previous' => 30,
+        'next' => 35,
+    ]);
+
+    expect($expectedTrue->passes())->toBeTrue();
+});
+
+it('cannot pass the validation rules when items not differs', function () {
+    $expectedFalse = validate([
+        'main' => 30,
+        'previous' => 30,
+        'next' => 35,
+    ]);
+
+    expect($expectedFalse->passes())->toBeFalse();
+});
+
+it('can pass the validation rules when previous and next are null', function () {
+    $expectedTrue = validate([
+        'main' => 25,
+        'previous' => null,
+        'next' => null,
+    ]);
+
+    expect($expectedTrue->passes())->toBeTrue();
+});
+
+it('cannot pass the validation rules when main is null', function () {
+    $expectedFalse = validate([
+        'main' => null,
+        'previous' => 30,
+        'next' => 35,
+    ]);
+
+    expect($expectedFalse->passes())->toBeFalse();
+});
+
+it('cannot pass the validation rules when main is equal to previous', function () {
+    $expectedFalse = validate([
+        'main' => 30,
+        'previous' => 30,
+        'next' => 35,
+    ]);
+
+    expect($expectedFalse->passes())->toBeFalse();
+});
+
+it('cannot pass the validation rules when main is equal to next', function () {
+    $expectedFalse = validate([
+        'main' => 35,
+        'previous' => 30,
+        'next' => 35,
+    ]);
+
+    expect($expectedFalse->passes())->toBeFalse();
+});
+
+it('cannot pass the validation rules when previous is equal to next', function () {
+    $expectedFalse = validate([
+        'main' => 25,
+        'previous' => 35,
+        'next' => 35,
+    ]);
+
+    expect($expectedFalse->passes())->toBeFalse();
+});
