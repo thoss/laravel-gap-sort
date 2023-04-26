@@ -150,9 +150,8 @@ After Sort:
 - Item2 (order 200)
 ```
 
-## Tests
+## Testing
 
-The package contains some tests, set up with Orchestra. The tests can be run via phpunit.
 
 ```bash
 composer test
