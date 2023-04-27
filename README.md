@@ -2,6 +2,7 @@
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/thoss/laravel-gap-sort/run-tests.yml?branch=main&label=tests)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/thoss/laravel-gap-sort/phpstan.yml?branch=main&label=PHPStan)
 [![Latest Version](https://img.shields.io/github/v/release/thoss/laravel-gap-sort.svg?style=flat-square)](https://github.com/thoss/laravel-gap-sort/releases)
 
 This package provides a way to sort items in a table using the "Gap" algorithm, which is a more efficient way of reordering items in a table than using incremental values. It takes into account the gap between the order values of adjacent items and calculates the new order value for the main item based on the positions of the previous and next items.
