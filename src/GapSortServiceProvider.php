@@ -24,7 +24,7 @@ class GapSortServiceProvider extends PackageServiceProvider
         }
 
         $this->app->bind('Illuminate\Routing\ResourceRegistrar', function () {
-            return new SortResourceRegistrar($this->app['router']);
+            return new SortResourceRegistrar($this->app['router']); // @phpstan-ignore-line
         });
     }
 }
