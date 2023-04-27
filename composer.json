@@ -1,6 +1,6 @@
 {
   "name": "thoss/laravel-gap-sort",
-  "description": "Package to sort items with laravel",
+  "description": "Sortable behaviour for Eloquent models with gap algorithm",
   "keywords": [
     "sort",
     "sortable",
