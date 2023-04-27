@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Thoss\GapSort;
 
 use Illuminate\Database\Eloquent\Model;
